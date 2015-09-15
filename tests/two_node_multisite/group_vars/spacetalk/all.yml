@@ -1,0 +1,9 @@
+---
+mongodb_meteor_user:
+    username: "spacetalk"
+    password: "spacetalk"
+    database: "spacetalk"
+
+mongodb_oplog_user:
+    username: "spacetalk_oplogger"
+    password: "spacetalk_oplogger"

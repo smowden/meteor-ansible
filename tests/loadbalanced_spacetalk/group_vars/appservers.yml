@@ -1,0 +1,30 @@
+---
+app_git_repo: "git@github.com:SpaceTalk/SpaceTalk.git"
+
+nginx_server_name: spacetalk.flowkey.dev
+nginx_config_file_name: "spacetalk"
+# this playbook sets up SSL temination at the loadbalancer, so we dont enable ssl on the appservers
+nginx_enable_ssl: no
+# we want to leverage all the resources the server has available, so we instruct passenger to start up two instances
+# of our app (passenger will handle routing/sticky sessions for us)
+# note: passenger doesnt seem to start instances on its own so you should explicitly state how many you want to be using
+passenger_min_instances: 2
+# you can also increase the max pool size of passenger which by default is six which is fairly low
+# a good guideline is to divide the machines available RAM by the amount of RAM that your app uses which should be around
+# 400
+passenger_max_pool_size: 12
+
+# rest is the same as in the previous example
+setup_phantomjs: yes
+app_root_dir: "/var/apps/spacetalk"
+app_bundle_dir: "/var/meteor_bundles/spacetalk"
+passenger_user: "spacetalk-www"
+passenger_group: "spacetalk-www"
+passenger_friendly_error_pages: 'on'
+meteor_settings_file: "settings.json"
+meteor_env:
+  # we can easily generate MONGO_URL and MONGO_OPLOG_URL from what we know already
+  MONGO_URL: 'mongodb://{{ mongodb_meteor_user.username }}:{{ mongodb_meteor_user.password }}@{{groups.mongoservers[0]}}:27017/{{ mongodb_meteor_user.database }}'
+  MONGO_OPLOG_URL: 'mongodb://{{ mongodb_oplog_user.username }}:{{ mongodb_oplog_user.password }}@{{groups.mongoservers[0]}}:27017/local?authSource=admin'
+
+  ROOT_URL: "http://spacetalk.flowkey.dev"

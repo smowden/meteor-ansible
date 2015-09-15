@@ -1,0 +1,9 @@
+[mongoservers]
+192.168.33.11
+
+[appservers]
+192.168.33.10
+
+[telescope:children]
+appservers
+mongoservers

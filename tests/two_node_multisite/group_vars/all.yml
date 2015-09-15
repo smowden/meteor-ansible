@@ -1,0 +1,4 @@
+---
+mongodb_root_user:
+    username: "mongo_sa"
+    password: "mongo_sa_28DLW6m9ORp9QtQj"

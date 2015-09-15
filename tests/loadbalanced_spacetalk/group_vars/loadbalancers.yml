@@ -1,0 +1,65 @@
+---
+haproxy_enable_ssl: yes
+# dont forcefully redirect http connections to ssl
+haproxy_force_ssl: no
+# ansible will try to gather IP addresses from the ethernet adapters of the appservers
+# you can specify which one to use, if you dont eth0 will be used by default
+haproxy_config_use_appservers_eth: eth1
+# if you set this haproxy will run healthchecks by trying to establish a websocket connection at this url
+# if you dont it will merely check if nginx is still running, which is far from as reliable
+haproxy_ws_healthcheck_domain: spacetalk.flowkey.dev
+# we want to enable the haproxy stats which will be avaible by
+# logging in with the specified credentials and at the specified port
+haproxy_enable_stats: yes
+haproxy_stats_username: someuser
+haproxy_stats_password: somepassword
+haproxy_stats_port: 21212
+# as haproxy will terminate our ssl connections we need to insert our ssl certs here
+ssl_certificate: |
+  -----BEGIN CERTIFICATE-----
+  MIIC0DCCAbigAwIBAgIJAJJKYRYN0EJEMA0GCSqGSIb3DQEBCwUAMCAxHjAcBgNV
+  BAMTFXRlbGVzY29wZS5mbG93a2V5LmRldjAeFw0xNTA2MDIxNDMwMTlaFw0yNTA1
+  MzAxNDMwMTlaMCAxHjAcBgNVBAMTFXRlbGVzY29wZS5mbG93a2V5LmRldjCCASIw
+  DQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAPMMs7bWNLmPaTqe08H9LRa8l41L
+  kr2aUjPtAOoge1z+oXATf+fnPn30J2XwvlXR1Fo723XifMwWaqUM+FUrjZ1H8U5l
+  6TVwgeoFW+Mp5dwORaE/yJZP7bUu99ObbG1FNA9yS4D8q+19wY5nci4SJ+ncWZyo
+  lTg3/0MbAY/MOTi9a808VGg1aovKWyDRpHBpHzblOdIEPuzLU/cfxLJ606ti0tEI
+  rd+tWDChbBwYEYxYY5g4Kgky9w9W4MdBuMiQQe4uF9eVOvNkg4k7dodF1CaHv0ze
+  ZBWBcqFPpfzlRdZbQlGUk2ZrXy1i59G+Otx+e20bGaB/aNLYQmqghV/fvr8CAwEA
+  AaMNMAswCQYDVR0TBAIwADANBgkqhkiG9w0BAQsFAAOCAQEAPfF6c8npZhsDRxkp
+  X+UPxqKQrbQnK+CBUbqGCecBgpqLbxDvZP3Nhe2Y2j4BZ7MKae8AX3k5CwG++Yqi
+  qM+chuL6vchNuysWdXmgrvRHXJ40X61ciTLMRjsCi6PDOOeBaMzFlCKNgULMsfRk
+  tVoTnb85YmMFhI2w7+7Chuf9W45sbywIifioz0uNUU5aUWQqpnC2ff8IoUhPbFwQ
+  JmBM0mnQVpJajtaKSgArPXS+3jTpSXH0rzOSWpDGEgoXCIzgAVxHiGkp4v8Ylf8q
+  cDuuBkWswLpDv/F5KC4qGIGcB/jlrVlydcAv+He5N8e6DsKpAxUCPiIsM65lfoIV
+  PNBz5A==
+  -----END CERTIFICATE-----
+ssl_key: |
+  -----BEGIN PRIVATE KEY-----
+  MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDzDLO21jS5j2k6
+  ntPB/S0WvJeNS5K9mlIz7QDqIHtc/qFwE3/n5z599Cdl8L5V0dRaO9t14nzMFmql
+  DPhVK42dR/FOZek1cIHqBVvjKeXcDkWhP8iWT+21LvfTm2xtRTQPckuA/KvtfcGO
+  Z3IuEifp3FmcqJU4N/9DGwGPzDk4vWvNPFRoNWqLylsg0aRwaR825TnSBD7sy1P3
+  H8SyetOrYtLRCK3frVgwoWwcGBGMWGOYOCoJMvcPVuDHQbjIkEHuLhfXlTrzZIOJ
+  O3aHRdQmh79M3mQVgXKhT6X85UXWW0JRlJNma18tYufRvjrcfnttGxmgf2jS2EJq
+  oIVf376/AgMBAAECggEAMieo3k4Ny00A1gv4fsuUBmEclRfHTEEQPY7m5WmWi3Yw
+  MkST3HMnvi4oAy1O2b7XJ1e6zfTS8/qcPzsR8+Fs88voy9jT6ycwZ+57K8F1oZeA
+  XuoepoYP85ehpJUqJtJlD9ryIcgCYpvU2WIXedJdUjEafO18/YDwuBRWmin2lPJ6
+  1mzYqaa9WTZsira6lRZWgiPVto5r89eVIJny6vsNoyXJZYVs6FJaN3dPcXcfnaQX
+  +QaCuYmjWxNnRLJTi8H608l+A2kKCP++RsSZ78fKwEyyBP1Q83bu6Jv6yO+gunY6
+  KsAD8d6wohTk+i33lgjaAENVhfGyiENbhbn/KeJpwQKBgQD/SjJltKgcFHQ7VhHZ
+  KWKWYMvi/F8kDHGCLGAYqEMI2Nq49zEh6u2WNMrU2S2iGTL+rflTDLJ98hs5i5F9
+  pjW3AAIC93kESKdvf+1l3RUQprxIV1KnazClfHalz6FHswLXEtT5A+S3I8v/jNrR
+  s/buaZT3LL9ckEhYqZCJWytAyQKBgQDzucnRMzj593RNWivkzDHaOSsisiGJYXUi
+  lCyQAcaotT1u+GDaECw2ZwZjm4g1qb5jYSZ2rE93lhnqKlGn0x/jfHBYK8UJH085
+  7FOUQQ/uIFNosULvm7RTGK2gTSwvnhpRolndIbzl9aWdQDa99itTmVfWaGhIV6bI
+  pStz9O0PRwKBgQDKD1AUcAkfMJFO5bD60WbW34aBAn/LaI3vGnB1E7j7J6j2/bBF
+  yEyEtwRTtBIKWyehrNHKiiI8zYP+6Bkf+o5JahgtgPKoEVl1Ryv/lB04MMCWAYfK
+  O20ljn3af5yHw4hb8uverNY6nnq4qiQIFwk7axYdDa3o9cpNYuijzyVNAQKBgQDj
+  uxFsO+RdDG7LaBnjaziZoxk/Dhpv93QvnywUUtSBBvgkHEjC+KGXI6TApa8cFUMk
+  ML5z3IVURBhqyKgLnCYLtVZzzFILOAobIUrnF/P+mI3XIOpeYKqZilGRmwpSY/RL
+  mttE2CVc6a6ZxEpiLQZG0t1UJbJrBht9F3gGnTB0OQKBgQD+tCSwnMzHbEuO4utU
+  ScZy5AZ7se8hFsGS3Y7Zvv/TcwzYXhx2CimTHuS+raD2byN80bEwst1ZZPjgkAb6
+  2uS8By8DX+lZ/lw7Y4QgWuVNxyAtSMCDZtP214zocHMMkPdfUVEwds0pERiAbGlM
+  eOtLtDauWVD83Z/JQvE0UxPH8A==
+  -----END PRIVATE KEY-----

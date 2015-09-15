@@ -1,0 +1,13 @@
+[mongoservers]
+192.168.33.11
+
+[appservers]
+192.168.33.10
+
+[telescope_servers:children]
+appservers
+mongoservers
+
+[spacetalk_servers:children]
+appservers
+mongoservers

@@ -1,0 +1,15 @@
+- name: Restart MongoDB
+  service: name={{ mongodb_daemon_name }} state=restarted
+
+- name: run initate replica set for oplog support
+  command: >
+    mongo 
+      --eval "rs.initiate(
+        {
+          '_id':'rs0',
+          'members':[
+            {'_id':0,'host':'127.0.0.1:27017'}
+          ]
+        })"
+- name: wait a moment mongodb primary election to finish
+  pause: seconds=1

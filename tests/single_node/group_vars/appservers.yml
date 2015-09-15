@@ -1,0 +1,20 @@
+---
+# first we specify the git/ssh path to the repository that holds our appication
+app_git_repo: "git@github.com:TelescopeJS/sample-project.git"
+# next we specify the branch to checkout (setting this to master is redundant, because that would be the default,
+# but I'm including this here for examples sake)
+app_git_checkout: master
+# requests to this domain will be served your meteor app by nginx-passenger. you can put multiple domains seperated by
+# a space if you want to
+nginx_server_name: telescope.flowkey.dev
+# setup phantomjs and make it accessible to user which runs our nodejs-meteor process, required if you want spiderable
+setup_phantomjs: yes
+# here we can setup our meteor environment variables, this is a dictionary so you can put everything you need here
+# for example you could also add MAIL_URL or your kadira credentials
+meteor_env:
+  # ansible is already aware off all the seperate parts of your MONGO_URL and MONGO_OPLOG url so we can easily assemble
+  # these two
+  MONGO_URL: 'mongodb://{{ mongodb_meteor_user.username }}:{{ mongodb_meteor_user.password }}@{{groups.mongoservers[0]}}:27017/{{ mongodb_meteor_user.database }}'
+  MONGO_OPLOG_URL: 'mongodb://{{ mongodb_oplog_user.username }}:{{ mongodb_oplog_user.password }}@{{groups.mongoservers[0]}}:27017/local?authSource=admin'
+
+  ROOT_URL: "http://telescope.flowkey.dev"

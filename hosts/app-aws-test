@@ -1,0 +1,14 @@
+[appservers]
+127.0.0.1:2222
+
+[mongoservers]
+#52.16.184.189  ansible_ssh_user=ubuntu
+
+[loadbalancers]
+#52.17.186.181 ansible_ssh_user=ubuntu
+
+[mongoservers:vars]
+groupEnvConfigFile=app-loadtest.yml
+
+[loadbalancers:vars]
+groupEnvConfigFile=app-loadtest.yml

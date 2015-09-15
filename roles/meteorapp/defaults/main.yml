@@ -1,0 +1,18 @@
+app_git_checkout: "master"
+app_root_dir: "/var/www/meteor_app"
+app_git_relative_dir: "/" # path relative to the git repo where your app resides
+app_bundle_dir: "/var/www/meteor_bundle"
+app_always_bundle: no # bundle the app even if bundle already exists
+nginx_config_file_name: "meteorapp"
+nginx_enable_ssl: no
+nginx_force_ssl: no
+nginx_ssl_key_file_name: meteor_app.key
+nginx_ssl_cert_file_name: meteor_app.pem
+nginx_client_max_body_size: 8m
+passenger_port: 80
+passenger_min_instances: 1
+passenger_friendly_error_pages: "off"
+passenger_pre_start: yes
+passenger_user: "app-www"
+passenger_group: "app-www"
+setup_phantomjs: no

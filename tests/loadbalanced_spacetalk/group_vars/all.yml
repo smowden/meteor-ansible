@@ -1,0 +1,12 @@
+mongodb_root_user:
+    username: "mongo_sa"
+    password: "mongo_sa_28DLW6m9ORp9QtQj"
+
+mongodb_meteor_user:
+    username: "meteor"
+    password: "28DLW6m9ORp9QtQj"
+    database: "meteor"
+
+mongodb_oplog_user:
+    username: "oplogger"
+    password: "mongo_oplog_28DLW6m9ORp9QtQj"

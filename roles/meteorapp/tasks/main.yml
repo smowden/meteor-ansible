@@ -1,0 +1,29 @@
+- name: install meteor
+  shell: creates=/usr/local/bin/meteor
+         curl https://install.meteor.com/ | sh
+
+- name: Install PhantomJS
+  apt: pkg=phantomjs state=present
+  when: setup_phantomjs
+
+- name: Get path to PhantomJS
+  command: which phantomjs
+  register: path_to_phantomjs
+  when: setup_phantomjs
+
+#- name: Allow PhantomJS execution
+#  when: setup_phantomjs
+#  lineinfile:
+#    dest: /etc/sudoers
+#    state: present
+#    regexp: '^{{ passenger_user }} ALL=\(ALL\) NOPASSWD: {{ path_to_phantomjs.stdout }}'
+#    line: "{{ passenger_user }} ALL=(ALL) NOPASSWD: {{ path_to_phantomjs.stdout }}"
+
+- name: Install git
+  apt: pkg=git state=present
+
+
+- include: deploy.yml
+  sudo: no
+  # ive encountered an error when installing npm packages through sudo (but not when running as root)
+  # not sure why this happens but it can be avoided by not running the all of the following commands without sudo

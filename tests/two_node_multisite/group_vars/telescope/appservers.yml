@@ -1,0 +1,11 @@
+---
+app_git_repo: "git@github.com:TelescopeJS/sample-project.git"
+nginx_server_name: telescope.flowkey.dev
+nginx_config_file_name: "telescope"
+setup_phantomjs: yes
+meteor_env:
+  # we can easily generate MONGO_URL and MONGO_OPLOG_URL from what we know already
+  MONGO_URL: 'mongodb://{{ mongodb_meteor_user.username }}:{{ mongodb_meteor_user.password }}@{{groups.mongoservers[0]}}:27017/{{ mongodb_meteor_user.database }}'
+  MONGO_OPLOG_URL: 'mongodb://{{ mongodb_oplog_user.username }}:{{ mongodb_oplog_user.password }}@{{groups.mongoservers[0]}}:27017/local?authSource=admin'
+
+  ROOT_URL: "http://telescope.flowkey.dev"

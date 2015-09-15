@@ -1,0 +1,22 @@
+- hosts: mongoservers
+  sudo: yes
+  roles:
+    - mongodb
+
+- hosts: appservers
+  sudo: yes
+  #vars_files:
+  #  - vars/main.yml
+  #  - group_vars/{{ groupEnvConfigFile }}
+  roles:
+    - nodejs
+    - nginx-passenger
+    - meteorapp
+  vars:
+    nodejs_npm_modules: ["fibers", "meteorite"]
+
+- hosts: loadbalancers
+  sudo: yes
+  roles:
+    - ansible-haproxy
+

@@ -1,0 +1,5 @@
+# these vars will be loaded in configure.yml when mongodb_config_for_meteor is set to true
+---
+  mongodb_conf_replSet: "rs0"
+  mongodb_conf_bind_ip: "0.0.0.0"
+  mongodb_conf_auth: yes

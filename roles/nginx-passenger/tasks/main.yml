@@ -1,0 +1,23 @@
+---
+- name: NGINX + Passenger | add https support for apt
+  apt: name={{ item }} state=present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+
+- name: NGINX + Passenger | add Phusion key
+  apt_key: keyserver=keyserver.ubuntu.com id=16378A33A6EF16762922526E561F9B9CAC40B2F7 state=present
+
+- name: NGINX + Passenger | add passenger repository
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main' state=present update_cache=yes
+
+- name: NGINX + Passenger | install nginx and passenger
+  apt: name={{ item }} state=present
+  with_items:
+    - nginx-extras
+    - passenger
+
+- name: NGINX + Passenger | copy nginx.conf
+  template: src=nginx.conf dest=/etc/nginx/nginx.conf
+  notify:
+    - restart nginx

@@ -1,0 +1,9 @@
+[mongoservers]
+192.168.33.10
+
+[appservers]
+192.168.33.11
+192.168.33.12
+
+[loadbalancers]
+192.168.33.13

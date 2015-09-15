@@ -1,0 +1,74 @@
+
+- name: "check if replica set is initiated"
+  command: >
+    mongo admin
+      --eval "printjson(rs.status())"
+  register: mongodb_rs_status
+  ignore_errors: yes
+
+
+- include: init_single_node_rs.yml
+  when: "'not running with --replSet' in mongodb_rs_status.stdout or 'EMPTYCONFIG' in mongodb_rs_status.stdout"
+
+- name: "check if mongodb root user already exists "
+  command: >
+    mongo admin
+      -u {{ mongodb_root_user.username }}
+      -p {{ mongodb_root_user.password }}
+      --eval "db.version()"
+  register: mongodb_root_login
+  ignore_errors: yes
+
+- name: "create mongodb root user"
+  when: "'login failed' in mongodb_root_login.stderr"
+  command: >
+    mongo admin
+    --eval "db.createUser(
+      {
+          'user': '{{ mongodb_root_user.username }}',
+          'pwd': '{{ mongodb_root_user.password }}',
+          'roles': [ 'root' ]
+      }
+    )"
+
+
+
+- name: "create meteor mongo user"
+  ignore_errors: yes
+  command: >
+    mongo {{ mongodb_meteor_user.database }}
+      --authenticationDatabase admin
+      -u "{{ mongodb_root_user.username }}"
+      -p "{{ mongodb_root_user.password }}"
+      --eval " db.createUser(
+        {
+            user: '{{ mongodb_meteor_user.username }}',
+            pwd: '{{ mongodb_meteor_user.password }}',
+            roles: [
+              {
+                role: 'readWrite',
+                db: '{{ mongodb_meteor_user.database }}'
+              }
+            ]
+        }
+      )"
+
+
+- name: "create meteor oplog user"
+  ignore_errors: yes
+  command: >
+    mongo admin
+      -u "{{ mongodb_root_user.username }}"
+      -p "{{ mongodb_root_user.password }}"
+      --eval "db.createUser(
+        {
+            user: '{{ mongodb_oplog_user.username }}',
+            pwd: '{{ mongodb_oplog_user.password }}',
+            roles: [
+              {
+                role: 'read',
+                db: 'local'
+              }
+            ]
+        }
+      )"

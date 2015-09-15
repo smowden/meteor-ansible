@@ -1,0 +1,41 @@
+---
+
+- name: 'Add haproxy apt repo'
+  sudo: yes
+  apt_repository: repo="ppa:vbernat/haproxy-1.5" state=present update_cache=yes
+  when: ansible_lsb.id == "Ubuntu"
+
+- name: 'Installs haproxy as well as socat for socket api'
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - haproxy
+    - socat
+  when: ansible_os_family == 'Debian'
+
+- name: 'Enable it'
+  service: name=haproxy enabled=yes
+
+- name: 'Ensure chroot directory exists'
+  file: name={{ haproxy_global.chroot }} state=directory
+  when: haproxy_global.chroot is defined and haproxy_global.chroot
+
+- name: ensure haproxy user exists
+  user: name=haproxy state=present
+
+- name: ensure haproxy group exists
+  group: name=haproxy state=present
+
+- name: copy haproxy config
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg
+  sudo: yes
+  notify:
+    - reload haproxy
+
+- name: make haproxy pem
+  template: src=haproxy_cert.pem.j2 dest=/etc/ssl/private/haproxy.pem
+  sudo: yes
+  when: haproxy_enable_ssl
+  notify:
+    - reload haproxy
+
+- service: name=haproxy state=started

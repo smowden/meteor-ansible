@@ -1,0 +1,13 @@
+---
+
+- include: install.deb.yml
+  when: ansible_os_family == 'Debian' and mongodb_install
+
+- include: configure.yml
+  when: mongodb_install
+
+- include: config_for_meteor.yml
+  when: mongodb_config_for_meteor
+
+- include: mms-agent.yml
+  when: mongodb_mms_api_key != ""

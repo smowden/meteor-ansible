@@ -1,0 +1,9 @@
+---
+    mongodb_meteor_user:
+        username: "telescope"
+        password: "telescope"
+        database: "telescope"
+
+    mongodb_oplog_user:
+        username: "telescope_oplogger"
+        password: "telescope_oplogger"

@@ -1,0 +1,4 @@
+[appservers]
+192.168.33.10
+[mongoservers]
+192.168.33.10
