@@ -47,7 +47,7 @@ frontend localnodes
 
 backend nodes
     mode http
-    balance roundrobin
+    balance leastconn
     option forwardfor
     cookie SERVERID insert indirect nocache
     http-request set-header X-Forwarded-Port %[dst_port]
