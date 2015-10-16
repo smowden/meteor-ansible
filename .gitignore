@@ -1,5 +1,6 @@
 .vagrant
 .ansible_vault_pass.txt
+group_vars
 /group_vars/*
 /inventory/*
 .idea
