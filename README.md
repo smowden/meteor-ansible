@@ -68,3 +68,6 @@ This article is very good: http://hakunin.com/six-ansible-practices
 
 Todo:
 - client_max_body_size
+
+Notes:
+ssh agent forwarding slow, disable and use git key for faster deploy
