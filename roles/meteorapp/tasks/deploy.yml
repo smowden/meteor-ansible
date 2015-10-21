@@ -113,6 +113,7 @@
          dest={{ app_root_dir }}
          version={{ app_git_checkout }}
          accept_hostkey=yes
+         force=yes
     register: git_checkout_result
 
   - set_fact:
