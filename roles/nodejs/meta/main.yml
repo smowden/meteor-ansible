@@ -1,23 +1,21 @@
 ---
-
-dependencies: []
-
 galaxy_info:
-  author: klen
-  company: Stouts
-  description: Install nodejs, npm and npm modules
+  author: "Niels Lemmens"
+  description: "Nodejs via package managers"
   license: MIT
+  min_ansible_version: 1.2
   platforms:
   - name: Ubuntu
     versions:
-    - all
+      - lucid
+      - precise
+      - saucy
+      - trusty
   - name: Debian
     versions:
-    - all
-  - name: Fedora
-    versions:
-    - all
+      - wheezy
   categories:
-  - development
-  - system
-  - web
+    - development
+    - packaging
+    - web
+dependencies: []

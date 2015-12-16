@@ -1,5 +1,0 @@
----
-
-- name: Install nodejs
-  yum: name=nodejs-{{nodejs_version}}
-

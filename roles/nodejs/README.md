@@ -1,47 +1,30 @@
-Stouts.nodejs
-=============
+Nodejs
+========
 
-[![Build Status](http://img.shields.io/travis/Stouts/Stouts.nodejs.svg?style=flat-square)](https://travis-ci.org/Stouts/Stouts.nodejs)
-[![Galaxy](http://img.shields.io/badge/galaxy-Stouts.nodejs-blue.svg?style=flat-square)](https://galaxy.ansible.com/list#/roles/983)
+This role is based on the setup from
+https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 
-Ansible role which manage nodejs and npm packages.
+Requirements
+------------
 
-#### Requirements
+Ubuntu or Debian.
+Gathering facts cannot be turned off.
 
-Only tested on ubuntu for now.
+Role Variables
+--------------
 
-#### Variables
+No role variables are being used.
+The distro information is retrieved from gathering facts.
 
-```yaml
-nodejs_enabled: yes                       # The role is enabled
 
-nodejs_repository: ppa:chris-lea/node.js  # NodeJS PPA
-nodejs_npm_modules: []                    # List modules which will be installed
-```
+Example Playbook
+-------------------------
 
-#### Usage
+    - hosts: servers
+      roles:
+         - bulv1ne.nodejs
 
-Add `Stouts.nodejs` to your roles and set vars in your playbook file.
+License
+-------
 
-Example:
-
-```yaml
-
-- hosts: all
-
-  roles:
-    - Stouts.nodejs
-
-  vars:
-    nodejs_npm_modules:
-      - bower
-      - jshint
-```
-
-#### License
-
-Licensed under the MIT License. See the LICENSE file for details.
-
-#### Feedback, bug-reports, requests, ...
-
-Are [welcome](https://github.com/Stouts/Stouts.nodejs/issues)!
+MIT

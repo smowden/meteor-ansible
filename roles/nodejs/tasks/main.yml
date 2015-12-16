@@ -1,5 +1,22 @@
 ---
 
-- include: nodejs.yml
-  when: nodejs_enabled
-  tags: [nodejs]
+- name: Install apt-transport-https
+  sudo: true
+  apt: name=apt-transport-https
+
+- name: Node apt-key
+  sudo: true
+  apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: Node sources list
+  sudo: true
+  template:
+    src=nodesource.list.j2
+    dest=/etc/apt/sources.list.d/nodesource.list
+
+- name: Node apt-get install
+  sudo: true
+  apt:
+    name=nodejs={{nodejs_repo_version}}
+    update_cache=yes
+    state=present
