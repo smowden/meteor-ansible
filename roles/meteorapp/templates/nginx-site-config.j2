@@ -12,6 +12,7 @@ server {
       ssl_session_cache shared:SSL:10m;
       {% if nginx_force_ssl %}
         if ($scheme = http) {
+            add_header 'Access-Control-Allow-Origin' '*';
             return 301 https://$server_name$request_uri;
         }
       {% endif %}
