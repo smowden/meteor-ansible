@@ -129,7 +129,9 @@
               app_bundle_checkout_dir_stat.stat.isdir is defined
               and app_bundle_checkout_dir_stat.stat.isdir
             )
+
   - copy: dest="{{ app_root_dir }}/.meteor/platforms" src=meteor_platforms force=yes
+    when: app_mobile_server
 
 
   - include: replace_meteor_bundle.yml
