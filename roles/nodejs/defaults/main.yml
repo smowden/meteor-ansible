@@ -1,2 +1,2 @@
 ---
-  nodejs_repo_version: "0.10.41-1nodesource1~{{ ansible_lsb.codename }}1"
+  nodejs_repo_version: "latest"

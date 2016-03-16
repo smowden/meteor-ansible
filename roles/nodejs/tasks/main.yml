@@ -17,6 +17,6 @@
 - name: Node apt-get install
   sudo: true
   apt:
-    name=nodejs={{nodejs_repo_version}}
+    #name=nodejs={{nodejs_repo_version}}
     update_cache=yes
     state=present
