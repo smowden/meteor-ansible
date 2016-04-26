@@ -30,7 +30,7 @@ server {
     passenger_max_requests {{ passenger_max_requests }};
     {% endif %}
     {% if var_meteor_settings is defined %}
-    passenger_env_var METEOR_SETTINGS '{{ meteor_settings }}';
+    passenger_env_var METEOR_SETTINGS '{{ var_meteor_settings.stdout }}';
     {% endif %}
 
     client_max_body_size {{ nginx_client_max_body_size }};
