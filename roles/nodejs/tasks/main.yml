@@ -21,6 +21,13 @@
     update_cache=yes
     state=present
 
+- name: npm apt-get install
+  sudo: true
+  apt:
+    name=npm
+    update_cache=yes
+    state=present
+
 - name: install mrt
   npm:
     global=yes
