@@ -20,3 +20,9 @@
     #name=nodejs={{nodejs_repo_version}}
     update_cache=yes
     state=present
+
+- name: install mrt
+  npm:
+    global=yes
+    name=meteorite
+    state=present
