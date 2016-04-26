@@ -60,8 +60,8 @@
       {{ app_checkout_bundle_path }}/bundle
     sudo: yes
 
-  - name: cleanup tmp dir
-    tidy: path=/tmp age=2w recurse=true matches="tmp.*" rmdirs=yes
+#  - name: cleanup tmp dir
+#    tidy: path=/tmp age=2w recurse=true matches="tmp.*" rmdirs=yes
 
 #  - name: cleanup bundle dir
 #    tidy: path={{ app_bundle_dir }} age=2w
