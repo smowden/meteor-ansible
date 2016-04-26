@@ -20,6 +20,7 @@
     name=nodejs=0.10.*
     update_cache=yes
     state=present
+    force=yes
 
 - name: npm apt-get install
   sudo: true
