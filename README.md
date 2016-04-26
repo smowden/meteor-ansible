@@ -1,5 +1,7 @@
 An Ansible Playbook for deploying Meteorapps
 
+* Requirement: Ansible > 2.0.0
+
 This Ansible playbook will allow you to deploy Meteor apps of all sizes to your own servers/VMs.
 It handles setups of varying complexity. From a single small VM that serves your app to a load balanced
 setup with multiple servers.
