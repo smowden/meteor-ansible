@@ -152,7 +152,7 @@
     register: var_meteor_settings
     when: meteor_settings_file is defined
 
-  - set_fact: meteor_settings="{{ var_meteor_settings.stdout }}"
+  - set_fact: meteor_settings=var_meteor_settings.stdout
     when: meteor_settings_file is defined
 
   - set_fact: meteor_settings=""

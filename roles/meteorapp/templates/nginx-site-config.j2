@@ -30,7 +30,7 @@ server {
     passenger_max_requests {{ passenger_max_requests }};
     {% endif %}
     {% if var_meteor_settings is defined %}
-    passenger_env_var METEOR_SETTINGS '{{ meteor_settings | regex_replace('^[\'"]?(.*)[\'"]?$','"\\1"') }}';
+    passenger_env_var METEOR_SETTINGS '{{ meteor_settings }}';
     {% endif %}
 
     client_max_body_size {{ nginx_client_max_body_size }};
