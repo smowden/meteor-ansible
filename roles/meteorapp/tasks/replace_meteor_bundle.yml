@@ -29,9 +29,13 @@
     stat: path={{ temp_dir.stdout }}/bundle/main.js
     register: bundle_main_file
 
-#  - fail:
-#      msg="Bundle is incomplete, the node process probably got killed while bundeling"
-#    when: not bundle_main_file.stat.exists
+  - fail:
+      msg: |
+        Bundle is incomplete, this could have
+        happened because the node process ran out of RAM.
+        Please try running this playbook against a host that
+        has more RAM or Swap Space
+    when: not bundle_main_file.stat.exists
 
   - name: install npm packages
     npm: path={{ temp_dir.stdout }}/bundle/programs/server

@@ -34,7 +34,8 @@
   - set_fact:
       app_path: "{{ app_root_dir }}/{{app_git_relative_dir}}"
 
-  - fail: |
+  - fail:
+      msg: |
           "to enable ssl please provide all of the following variables:
             - nginx_enable_ssl,
             - ssl_key,
