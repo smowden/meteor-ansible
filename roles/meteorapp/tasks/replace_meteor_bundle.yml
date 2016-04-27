@@ -21,7 +21,7 @@
       chdir={{ app_path }}
       meteor build --directory {{ temp_dir.stdout }} {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %}
     register: meteor_build_result
-    async: 300
+    async: 600
     poll: 5
 #    failed_when: "'Error:' in meteor_build_result.stdout or 'ERR!' in meteor_build_result.stdout"
 
