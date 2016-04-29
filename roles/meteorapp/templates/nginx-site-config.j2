@@ -29,7 +29,7 @@ server {
     {% if passenger_max_requests is defined %}
     passenger_max_requests {{ passenger_max_requests }};
     {% endif %}
-    {% if var_meteor_settings is defined %}
+    {% if meteor_settings %}
     passenger_env_var METEOR_SETTINGS '{{ var_meteor_settings.stdout }}';
     {% endif %}
 
