@@ -12,14 +12,20 @@
       chdir={{ app_path }}
       $(which mrt) update
 
-  - name: create temp dir
-    command: mktemp --directory
-    register: temp_dir
+  - name: check for package.json
+    stat: path={{ app_path }}/package.json
+    register: package_json
 
   - name: install npm packages for app
     command:
       chdir={{ app_path }}
       meteor npm install
+    when: package_json.stat.exists
+
+  - name: create temp dir
+    command: mktemp --directory
+    register: temp_dir
+
 
   - name: build meteor app
     command:
