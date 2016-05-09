@@ -16,3 +16,4 @@ passenger_pre_start: yes
 passenger_user: "app-www"
 passenger_group: "app-www"
 setup_phantomjs: no
+passenger_start_timeout: 120

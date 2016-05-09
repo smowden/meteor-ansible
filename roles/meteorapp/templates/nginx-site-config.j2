@@ -26,6 +26,7 @@ server {
     passenger_app_type node;
     passenger_min_instances {{ passenger_min_instances }};
     passenger_startup_file main.js;
+    passenger_start_timeout {{ passenger_start_timeout }};
     {% if passenger_max_requests is defined %}
     passenger_max_requests {{ passenger_max_requests }};
     {% endif %}
