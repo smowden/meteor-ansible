@@ -30,7 +30,7 @@
   - name: build meteor app
     command:
       chdir={{ app_path }}
-      meteor build --directory {{ temp_dir.stdout }} {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %}
+      meteor build --server-only --directory {{ temp_dir.stdout }} {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %}
     register: meteor_build_result
     async: 600
     poll: 5
