@@ -22,6 +22,10 @@
     state=present
     force=yes
 
+- name: install build tools
+  sudo: true
+  apt: name=build-essential state=present
+
 - name: install mrt
   npm:
     global=yes
