@@ -19,7 +19,7 @@
   - name: install npm packages for app
     command:
       chdir={{ app_path }}
-      meteor npm install
+      meteor npm install --production
     when: package_json.stat.exists
 
   - name: create temp dir
