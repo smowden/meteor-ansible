@@ -17,7 +17,7 @@
 - name: Node apt-get install
   sudo: true
   apt:
-    name=nodejs=0.10.*
+    name=nodejs=v4.*
     update_cache=yes
     state=present
     force=yes
