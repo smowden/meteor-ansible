@@ -43,7 +43,7 @@ Three Tests are included and also serve as examples:
 
 Possible group variables:
 all.yml
-# these are the users that will be created in case you choose your own mongodb server
+these are the users that will be created in case you choose your own mongodb server
 - mongodb_root_user:
   # the root user, which will be created to enable the creation of the other users
     - username
@@ -65,6 +65,8 @@ all.yml
 Appservers:
 see roles/meteorapp/README.md
 
+All variables can be combined into all.yml for simpler deployment
+
 Tips:
 This article is very good: http://hakunin.com/six-ansible-practices
 
@@ -72,4 +74,4 @@ Todo:
 - client_max_body_size
 
 Notes:
-ssh agent forwarding slow, disable and use git key for faster deploy
+ssh agent forwarding is slow when cloning a repo, disable and use git key for faster deploy
