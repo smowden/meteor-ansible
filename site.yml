@@ -2,6 +2,7 @@
   sudo: yes
   roles:
     - mongodb
+    - telusdigital.logdna
 
 - hosts: appservers
   sudo: yes
@@ -12,12 +13,14 @@
     - nodejs
     - nginx-passenger
     - meteorapp
+    - telusdigital.logdna
   vars:
     nodejs_npm_modules: ["fibers", "meteorite"]
-    nodejs_version: 0.10.40
 
 - hosts: loadbalancers
   sudo: yes
   roles:
     - ansible-haproxy
+    - telusdigital.logdna
+
 
