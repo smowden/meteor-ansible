@@ -1,1 +1,1 @@
-ansible-logdna@1.2
+telusdigital.logdna
