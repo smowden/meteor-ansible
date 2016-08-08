@@ -1,0 +1,34 @@
+---
+sudo: required
+dist: trusty
+language: generic
+
+env:
+  - PLAYBOOK=test-install.yml
+
+before_install:
+  - sudo apt-get update -qq
+
+install:
+  # install ansible
+  - sudo pip install ansible
+
+  # configure ansible
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+
+script:
+  # check syntax
+  - "ansible-playbook -i test/inventory test/$PLAYBOOK --syntax-check"
+
+  # initial run
+  - "ansible-playbook -i test/inventory test/$PLAYBOOK --connection=local --sudo"
+
+  # check idempotence
+  - "ansible-playbook -i test/inventory test/$PLAYBOOK --connection=local --sudo"
+
+  # check that service is working
+  - sudo service logdna-agent restart
+
+notifications:
+  slack:
+    secure: Rk9awkJnCmmnG29xxhpinKxkg1jfJekzTv97Z77cd/LkGzK2Z45PBCN5XCL4gr8tiIpq4Me/qUBJc0XS1DKfd+a6D++j0dJAMTfhxf7gzbvb30hObKO3zMOQziSnn+XB3L3j8h6AY9S0/i4mdmJ0+J1/0zOsuB/+oFSzfp5/xjYBMP/ow8WEWP+6d+nc9ZLISijLNm0VkINVqrroL2i66yluobzaeBxirvOCtnQgtxnj+WboBXuQSaqOyiVacG7Pog1A038BiAmPRo5Pf8nqudlUifxEmCt66WODNXsFKuE9vYOZp6o6dagjv5ltzIU8C6uGVA6sGfd+ZwYph4pc/KozIGe+oket0SnB+D0nN4QL/mIKqyKjqQ99Luu973kXN5z9bYbjp4kTDyjqFqhMB80VAoKl9tadsjwQZj34yFTalou8VXw2MCG+lWggHfZFjmSjdXTXJbLeZyTZdt1wM+dhgl4O/7fuQJNuNPyEtAhm1HaZyN92j7epgRQ/p0fTr666zSVTak3HWTlCoC8AmZJEepjg9R04PuedurVKaTpH/3DWri0vXpW2Mv3SzeEkXSQOIg7+pCVh626TwngF/ADbuR8BoODHvWd6KICbnfzUG/+0P4NCkUU/pWSRE7lBKzrkzXARg8TQNOH1wvQZ7yIS9Z07vrqpJfDVkBYGllU=

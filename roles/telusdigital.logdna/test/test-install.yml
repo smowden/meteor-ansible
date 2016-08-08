@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - role: ansible-logdna
+      logdna_secret_key: "{{ lookup('env','LOGDNA_SECRET_KEY') }}"

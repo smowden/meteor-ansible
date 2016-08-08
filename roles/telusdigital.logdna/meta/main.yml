@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: "Ben Visser"
+  categories:
+    - logging
+  company: "TELUS digital"
+  description: "The easiest cloud log management system you will ever use."
+  license: MIT
+  min_ansible_version: 1.2
+  version: 1.0.1
+  platforms:
+    - name: Ubuntu
+      versions:
+        - precise
+        - trusty
+        - utopic
+    - name: EL
+      versions:
+        - 6
+    - name: Amazon
+      versions:
+        - 2016.03

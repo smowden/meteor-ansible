@@ -1,0 +1,25 @@
+---
+- name: Configure | PPA repo
+  shell: "echo 'deb http://repo.logdna.com stable main' | sudo tee /etc/apt/sources.list.d/logdna.list"
+
+- name: Install Package | apt | logdna-agent
+  apt:
+    state: latest
+    force: yes
+    name: logdna-agent
+    update_cache: yes
+
+- name: Configure | logdna secret key
+  become: true
+  shell: "logdna-agent -k {{ logdna_secret_key }}"
+
+- name: Configure | directory log location
+  become: true
+  shell: "logdna-agent -d {{ logdna_logging_directory }}"
+
+- name: Configure | service | logdna-agent
+  become: true
+  service:
+    name: logdna-agent
+    enabled: yes
+  notify: service | logdna-agent | started

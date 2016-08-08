@@ -1,0 +1,28 @@
+---
+- name: Configure | YUM repo
+  yum_repository:
+    name: logdna
+    enabled: yes
+    description: LogDNA packages
+    baseurl: http://repo.logdna.com/el6/
+    gpgcheck: no
+
+- name: Install Package | yum | logdna-agent
+  yum:
+    state: latest
+    name: logdna-agent
+
+- name: Configure | logdna secret key
+  become: true
+  shell: "logdna-agent -k {{ logdna_secret_key }}"
+
+- name: Configure | directory log location
+  become: true
+  shell: "logdna-agent -d {{ logdna_logging_directory }}"
+
+- name: Configure | service | logdna-agent
+  become: true
+  service:
+    name: logdna-agent
+    enabled: yes
+  notify: service | logdna-agent | started

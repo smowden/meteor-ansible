@@ -1,0 +1,20 @@
+---
+- name: service | logdna-agent | started
+  service:
+    state: started
+    name: logdna-agent
+
+- name: service | logdna-agent | stopped
+  service:
+    state: stopped
+    name: logdna-agent
+
+- name: service | logdna-agent | restarted
+  service:
+    state: restarted
+    name: logdna-agent
+
+- name: service | logdna-agent | reloaded
+  service:
+    state: reloaded
+    name: logdna-agent
