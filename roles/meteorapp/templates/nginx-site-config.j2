@@ -18,7 +18,6 @@ server {
     {% endif %}
 
     root {{ app_checkout_bundle_path }}/bundle/public/;
-    passenger_log_file /var/log/nginx/error.{{ nginx_server_name }}
     passenger_enabled on;
     passenger_friendly_error_pages {{ passenger_friendly_error_pages }};
     passenger_sticky_sessions on;
