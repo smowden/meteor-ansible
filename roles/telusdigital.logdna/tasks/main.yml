@@ -4,3 +4,5 @@
 
 - include: install-debian.yml
   when: ansible_os_family == 'Debian'
+
+- service: name=logdna-agent state=restarted
