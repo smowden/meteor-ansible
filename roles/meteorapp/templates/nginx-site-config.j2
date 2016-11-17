@@ -2,7 +2,7 @@ server {
     server_name {{ nginx_server_name }};
     listen {{ passenger_port }};
     {% if nginx_enable_ssl %}
-      listen 443 ssl spdy;
+      listen 443 ssl;
       ssl on;
       ssl_certificate     /etc/ssl/certs/{{ nginx_ssl_cert_file_name }};
       ssl_certificate_key /etc/ssl/private/{{ nginx_ssl_key_file_name }};
