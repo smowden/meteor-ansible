@@ -1,17 +1,6 @@
   - name: cleanup git dir
     command: git clean -d -x -f chdir={{ app_root_dir }}
 
-  - name: delete all mrt packages
-    file: path="~/.meteorite/{{ item }}" state=absent
-    with_items:
-      - source
-      - packages
-
-  - name: reininstall mrt packages
-    shell:
-      chdir={{ app_path }}
-      $(which mrt) update
-
   - name: check for package.json
     stat: path={{ app_path }}/package.json
     register: package_json
