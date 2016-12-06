@@ -1,7 +1,72 @@
-- hosts: all
-  sudo: yes
-  roles:
-      - { role: telusdigital.logdna, when: logdna_secret_key is defined }
+#- hosts: all
+#  sudo: yes
+#  roles:
+#      - { role: telusdigital.logdna, when: logdna_secret_key is defined }
+
+
+- hosts: localhost
+  gather_facts: False
+  sudo: no
+  tasks:
+    - name: clone repo from github
+      git: repo={{ app_git_repo | mandatory }}
+           update=yes
+           dest={{ flowkey_app_dir }}
+           version={{ app_git_checkout }}
+           accept_hostkey=yes
+           force=yes
+      register: git_checkout_result
+
+    - debug: msg={{ git_checkout_result }}
+
+    - file: path=flowkey_build_dir state=directory
+
+    - s3: bucket="{{ s3_bucket }}"
+          mode=list
+          marker="{{ git_checkout_result.after }}"
+          region=eu-west-1
+          aws_secret_key={{ aws_secret_key }}
+          aws_access_key={{ aws_access_key }}
+      register: s3_list_result
+
+    - set_fact: s3_bundle_already_exists=True
+      when: '"{{ git_checkout_result.after }}" in s3_list_result.s3_keys[0]'
+
+
+    - name: build meteor app
+      command:
+        chdir={{ flowkey_app_dir }}
+        meteor build {{ flowkey_build_dir }}/{{ git_checkout_result.after }} --server-only {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %}
+      register: meteor_build_result
+      async: 600
+      poll: 5
+      when: s3_bundle_already_exists is not defined
+
+    - find: paths="{{ flowkey_build_dir }}{{ git_checkout_result.after }}"
+            patterns="*.tar.gz"
+      register: bundle_file
+
+    - name: get app settings
+      command: cat "{{ flowkey_app_dir }}/{{ meteor_settings_file }}"
+      register: var_meteor_settings
+      when: meteor_settings_file is defined
+
+    - set_fact: meteor_settings=True
+      when: meteor_settings_file is defined
+
+    - set_fact: meteor_settings=False
+      when: not meteor_settings_file is defined
+
+    - set_fact: deploy_git_commit=git_checkout_result.after
+
+    - s3: bucket={{ s3_bucket }}
+          src="{{ bundle_file.files[0].path }}"
+          object="{{ git_checkout_result.after }}.tar.gz"
+          mode=put
+          region=eu-west-1
+          aws_secret_key={{ aws_secret_key }}
+          aws_access_key={{ aws_access_key }}
+      when: s3_bundle_already_exists is not defined
 
 - hosts: mongoservers
   sudo: yes
@@ -10,6 +75,8 @@
 
 - hosts: appservers
   sudo: yes
+  vars:
+    deploy_git_commit: "{{ git_checkout_result.after }}"
   #vars_files:
   #  - vars/main.yml
   #  - group_vars/{{ groupEnvConfigFile }}

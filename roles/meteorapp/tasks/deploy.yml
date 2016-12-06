@@ -1,38 +1,42 @@
-
-  # - include: create_dirs.yml
-  #- include_vars: hipchat.yml
-
-  #- name: letting people know whats going on
-  #  hipchat: room={{hipchat_room}} token={{hipchat_token}} color="yellow" msg="Starting deployment of {{ app_git_checkout }} on {{ ansible_hostname }}. Root url is {{root_url}}." validate_certs=no
-  #  ignore_errors: yes
-  #
-
-#  - debug: var=nginx_enable_ssl
-#  - debug: var=ssl_key
-#  - debug: var=ssl_certificate
-#  - debug: var=nginx_ssl_key_file_name
-#  - debug: var=nginx_ssl_cert_file_name
-
-
-  - name: ensure github.com is a known host
-    lineinfile:
-      dest: ~/.ssh/known_hosts
-      create: yes
-      state: present
-      line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
-      regexp: "^github\\.com"
-
-
-  - name: ensure bitbucket.org is a known host
-    lineinfile:
-      dest: ~/.ssh/known_hosts
-      create: yes
-      state: present
-      line: "{{ lookup('pipe', 'ssh-keyscan -t rsa bitbucket.org') }}"
-      regexp: "^github\\.org"
+  - set_fact: deploy_commit={{ hostvars['localhost']['git_checkout_result']['after'] }}
 
   - set_fact:
-      app_path: "{{ app_root_dir }}/{{app_git_relative_dir}}"
+      app_path="{{ app_root_dir }}/{{ app_git_relative_dir }}"
+      meteor_settings_file_exists="{{ hostvars['localhost']['meteor_settings'] }}"
+      app_checkout_bundle_path="{{ app_bundle_dir }}/{{ deploy_commit }}"
+      tarball_destination="{{ app_bundle_dir }}/{{ deploy_commit }}.tar.gz"
+
+  - file: path={{ app_bundle_dir }} state=directory
+    sudo: yes
+
+  - apt: name=python-boto update_cache=yes state=present
+    sudo: yes
+
+
+  - s3: bucket={{ s3_bucket }}
+        dest="{{ tarball_destination }}"
+        object="{{ deploy_commit }}.tar.gz"
+        mode="get"
+        region=eu-west-1
+        aws_access_key={{ aws_access_key }}
+        aws_secret_key={{ aws_secret_key }}
+    sudo: yes
+
+  - file: path={{ app_checkout_bundle_path }} state=absent
+    sudo: yes
+
+  - name: create directory
+    sudo: yes
+    file:
+      path={{ app_checkout_bundle_path }}
+      state=directory
+      owner={{ ansible_ssh_user }}
+      group={{ ansible_ssh_user }}
+
+
+
+  - name: extract bundle
+    command: tar -xf {{ app_bundle_dir }}/{{ deploy_commit }}.tar.gz -C {{ app_checkout_bundle_path }}
 
   - fail:
       msg: |
@@ -48,29 +52,6 @@
       and nginx_ssl_key_file_name is defined
       and nginx_ssl_cert_file_name is defined
       ))
-
-  - name: ensure .ssh dir exists
-    file: path=~/.ssh state=directory
-    when: git_deploy_private_key is defined
-
-  - name: copy deploy keyfile
-    copy:
-      content: "{{ git_deploy_private_key }}"
-      dest: "~/.ssh/id_rsa_git"
-    when: git_deploy_private_key is defined
-
-  - name: restrict permissions for the key
-    file: path=~/.ssh/id_rsa_git owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }} mode=0700 state=file
-    when: git_deploy_private_key is defined
-
-  - name: add deploy key to ssh config
-    when: git_deploy_private_key is defined
-    lineinfile:
-      dest=~/.ssh/config
-      regexp="id_rsa_git"
-      line="IdentityFile ~/.ssh/id_rsa_git"
-      state=present
-      create=yes
 
   - name: copy ssl key
     copy:
@@ -90,7 +71,6 @@
     notify:
       - restart nginx
 
-
   - name: ensure app group exists
     group: name={{ passenger_group }} state=present
     sudo: yes
@@ -108,35 +88,18 @@
       group={{ ansible_ssh_user }}
 
 
-  - name: clone repo from github
-    git: repo={{ app_git_repo | mandatory }}
-         update=yes
-         dest={{ app_root_dir }}
-         version={{ app_git_checkout }}
-         accept_hostkey=yes
-         force=yes
-    register: git_checkout_result
+  - name: check for package.json
+    stat: path={{ app_checkout_bundle_path }}/bundle/package.json
+    register: package_json
 
-  - set_fact:
-      app_checkout_bundle_path="{{ app_bundle_dir }}/{{ git_checkout_result.after }}"
+  - name: install npm packages for app
+    command:
+      chdir={{ app_checkout_bundle_path }}/bundle
+      meteor npm install --production
+    when: package_json.stat.exists
 
-  - stat: path={{ app_checkout_bundle_path }}/bundle
-    register: app_bundle_checkout_dir_stat
-
-  - set_fact:
-      do_bundle_meteor_app: >
-          app_always_bundle or
-            not (
-              app_bundle_checkout_dir_stat.stat.isdir is defined
-              and app_bundle_checkout_dir_stat.stat.isdir
-            )
-
-#  - copy: dest="{{ app_root_dir }}/.meteor/platforms" src=meteor_platforms force=yes
-#    when: app_mobile_server is defined
-
-
-  - include: replace_meteor_bundle.yml
-    when: do_bundle_meteor_app
+  - name: install npm packages for server
+    npm: path={{ app_checkout_bundle_path }}/bundle/programs/server
 
   - name: ensure correct owner, group and permissions
     file:
@@ -146,17 +109,6 @@
       mode=0755
       recurse=true
     sudo: yes
-
-  - name: get app settings
-    command: cat "{{ app_path }}/{{ meteor_settings_file }}"
-    register: var_meteor_settings
-    when: meteor_settings_file is defined
-
-  - set_fact: meteor_settings=True
-    when: meteor_settings_file is defined
-
-  - set_fact: meteor_settings=False
-    when: not meteor_settings_file is defined
 
   - name: copy nginx conf
     template:
