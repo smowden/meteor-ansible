@@ -7,7 +7,6 @@
 - hosts: localhost
   sudo: no
   tasks:
-    - debug: msg={{ hostvars }}
     - name: clone repo from github
       git: repo={{ app_git_repo | mandatory }}
            update=yes
