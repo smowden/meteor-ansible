@@ -42,7 +42,7 @@
     - name: build meteor app
       command:
         chdir={{ flowkey_app_dir }}
-        meteor build {{ flowkey_build_dir }}/{{ git_checkout_result.after }} --server-only {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %}
+        meteor build {{ flowkey_build_dir }}/{{ git_checkout_result.after }} --server-only {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %} --allow-superuser
       register: meteor_build_result
       async: 600
       poll: 5
