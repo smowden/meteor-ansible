@@ -1,5 +1,7 @@
+  - debug: msg={{ hostvars }}
   - set_fact: deploy_commit={{ hostvars['localhost']['git_checkout_result']['after'] }}
 
+  - debug: msg="{{ app_mobile_server }}"
   - set_fact:
       app_path="{{ app_root_dir }}/{{ app_git_relative_dir }}"
       meteor_settings_file_exists="{{ hostvars['localhost']['meteor_settings'] }}"
@@ -13,13 +15,13 @@
     sudo: yes
 
 
-  - s3: bucket={{ s3_bucket }}
+  - s3: bucket="{{ s3_bucket }}"
         dest="{{ tarball_destination }}"
         object="{{ deploy_commit }}.tar.gz"
         mode="get"
         region=eu-west-1
-        aws_access_key={{ aws_access_key }}
-        aws_secret_key={{ aws_secret_key }}
+        aws_access_key="{{ aws_access_key }}"
+        aws_secret_key="{{ aws_secret_key }}"
     sudo: yes
 
   - file: path={{ app_checkout_bundle_path }} state=absent

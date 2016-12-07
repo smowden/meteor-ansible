@@ -5,9 +5,9 @@
 
 
 - hosts: localhost
-  gather_facts: False
   sudo: no
   tasks:
+    - debug: msg={{ hostvars }}
     - name: clone repo from github
       git: repo={{ app_git_repo | mandatory }}
            update=yes
@@ -19,9 +19,11 @@
 
     - debug: msg={{ git_checkout_result }}
 
-    - file: path=flowkey_build_dir state=directory
+    - name: ensure target dir exists
+      file: path=flowkey_build_dir state=directory
 
-    - s3: bucket="{{ s3_bucket }}"
+    - name: lookup bundles on s3
+      s3: bucket="{{ s3_bucket }}"
           mode=list
           marker="{{ git_checkout_result.after }}"
           region=eu-west-1
@@ -29,9 +31,14 @@
           aws_access_key={{ aws_access_key }}
       register: s3_list_result
 
-    - set_fact: s3_bundle_already_exists=True
-      when: '"{{ git_checkout_result.after }}" in s3_list_result.s3_keys[0]'
 
+    - name: check whether bundle already exists
+      set_fact: s3_bundle_already_exists=True
+      when: 's3_list_result.s3_keys[0] is defined and "{{ git_checkout_result.after }}" in s3_list_result.s3_keys[0]'
+      ignore_errors: True
+
+    - name: ensure build destination path exists
+      file: path={{ flowkey_build_dir }}/{{ git_checkout_result.after }} state=directory
 
     - name: build meteor app
       command:
@@ -42,9 +49,11 @@
       poll: 5
       when: s3_bundle_already_exists is not defined
 
-    - find: paths="{{ flowkey_build_dir }}{{ git_checkout_result.after }}"
+    - name: find exact path to bundle
+      find: paths="{{ flowkey_build_dir }}{{ git_checkout_result.after }}"
             patterns="*.tar.gz"
       register: bundle_file
+      when: s3_bundle_already_exists is not defined
 
     - name: get app settings
       command: cat "{{ flowkey_app_dir }}/{{ meteor_settings_file }}"
@@ -59,7 +68,8 @@
 
     - set_fact: deploy_git_commit=git_checkout_result.after
 
-    - s3: bucket={{ s3_bucket }}
+    - name: upload local bundle to s3
+      s3: bucket={{ s3_bucket }}
           src="{{ bundle_file.files[0].path }}"
           object="{{ git_checkout_result.after }}.tar.gz"
           mode=put
