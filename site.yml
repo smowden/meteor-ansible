@@ -39,14 +39,16 @@
     - name: ensure build destination path exists
       file: path={{ flowkey_build_dir }}/{{ git_checkout_result.after }} state=directory
 
+
+    - debug: msg="{{flowkey_app_dir}}"
     - name: install required npm packages
       command:
-        chdir={{ flowkey_app_dir }}
+        chdir="{{ flowkey_app_dir }}"
         meteor npm install
 
     - name: build meteor app
       command:
-        chdir={{ flowkey_app_dir }}
+        chdir="{{ flowkey_app_dir }}"
         meteor build {{ flowkey_build_dir }}/{{ git_checkout_result.after }} --server-only {% if app_mobile_server is defined %} --server {{ app_mobile_server }} {% endif %} --allow-superuser
       register: meteor_build_result
       async: 600
