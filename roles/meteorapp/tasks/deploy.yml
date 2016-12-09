@@ -102,7 +102,7 @@
     npm:
       name: node-gyp
       global: yes
-    sudo: yes<
+    sudo: yes
 
   - command: node-gyp clean
 
