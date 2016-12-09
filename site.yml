@@ -72,7 +72,7 @@
     - set_fact: meteor_settings=False
       when: not meteor_settings_file is defined
 
-    - set_fact: deploy_git_commit=git_checkout_result.after
+    - set_fact: deploy_git_commit={{ git_checkout_result.after }}
 
     - name: upload local bundle to s3
       s3: bucket={{ s3_bucket }}
