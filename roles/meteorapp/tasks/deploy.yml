@@ -99,7 +99,9 @@
     when: package_json.stat.exists
 
   - name: install npm packages for server
-    npm: path={{ app_checkout_bundle_path }}/bundle/programs/server
+    command:
+      chdir={{ app_checkout_bundle_path }}/bundle/programs/server
+      npm install
 
   - name: ensure correct owner, group and permissions
     file:
