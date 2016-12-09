@@ -101,7 +101,7 @@
   - name: install npm packages for server
     command:
       chdir={{ app_checkout_bundle_path }}/bundle/programs/server
-      npm install
+      npm install --production
 
   - name: ensure correct owner, group and permissions
     file:
