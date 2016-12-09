@@ -98,6 +98,11 @@
       meteor npm install --production
     when: package_json.stat.exists
 
+  - name: "install node-gyp globally"
+    npm:
+      name: node-gyp
+      global: yes
+
   - command: node-gyp clean
 
   - name: install npm packages for server
