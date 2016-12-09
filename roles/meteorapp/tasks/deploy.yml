@@ -98,6 +98,8 @@
       meteor npm install --production
     when: package_json.stat.exists
 
+  - command: node-gyp clean
+
   - name: install npm packages for server
     command:
       chdir={{ app_checkout_bundle_path }}/bundle/programs/server
