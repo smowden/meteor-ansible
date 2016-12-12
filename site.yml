@@ -13,8 +13,9 @@
            dest={{ flowkey_app_dir }}
            version={{ app_git_checkout }}
            accept_hostkey=yes
-#           force=yes
+           force=yes
       register: git_checkout_result
+      until: git_checkout_result|succeeded # bug in ansible 2.2, https://github.com/ansible/ansible-modules-core/issues/5504#issuecomment-265923220
 
     - debug: msg={{ git_checkout_result }}
 
