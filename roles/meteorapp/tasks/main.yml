@@ -11,6 +11,8 @@
   register: path_to_phantomjs
   when: setup_phantomjs
 
+- debug: msg={{ hostvars }}
+
 #- name: Allow PhantomJS execution
 #  when: setup_phantomjs
 #  lineinfile:

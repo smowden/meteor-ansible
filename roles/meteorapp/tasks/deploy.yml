@@ -1,5 +1,7 @@
+  - debug: msg={{ hostvars }}
   - set_fact: deploy_commit={{ hostvars['localhost']['git_checkout_result']['after'] }}
 
+  - debug: msg="{{ app_mobile_server }}"
   - set_fact:
       app_path="{{ app_root_dir }}/{{ app_git_relative_dir }}"
       meteor_settings_file_exists="{{ hostvars['localhost']['meteor_settings'] }}"
