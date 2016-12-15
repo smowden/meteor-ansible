@@ -1,4 +1,4 @@
-  - debug: msg={{ groups['appservers] }}
+  - debug: msg={{ groups['appservers'] }}
   - set_fact: deploy_commit={{ hostvars['localhost']['git_checkout_result']['after'] }}
 
   - set_fact:
