@@ -60,7 +60,7 @@ backend nodes
     option httpchk HEAD / HTTP/1.1\r\nHost:localhost
     {% endif %}
 
-    {% for host in groups['appservers'] %}
+    {% for host in groups['appservers'] %} # todo use hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] but check whether host is reachable first
       server s{{loop.index}} {{ host }}:80 check cookie s{{loop.index}}
     {% endfor %}
 
