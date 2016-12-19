@@ -61,9 +61,11 @@ backend nodes
     {% endif %}
 
     {% for host in groups['appservers'] %}
-      {% if hostvars[host] is defined %}
-      server s{{loop.index}} {{ hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] }}:80 check cookie s{{loop.index}}
-      {% endif %}
+
+    {% if hostvars[host] is defined %}
+    server s{{loop.index}} {{ hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] }}:80 check cookie s{{loop.index}}
+    {% endif %}
+
     {% endfor %}
 
 {% if haproxy_enable_stats %}
