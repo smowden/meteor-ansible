@@ -60,8 +60,10 @@ backend nodes
     option httpchk HEAD / HTTP/1.1\r\nHost:localhost
     {% endif %}
 
-    {% for host in groups['appservers'] %} # todo use hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] but check whether host is reachable first
-      server s{{loop.index}} {{ host }}:80 check cookie s{{loop.index}}
+    {% for host in groups['appservers'] %}
+      {% if hostvars[host] is defined %} # dont add unreachable servers
+      server s{{loop.index}} {{ hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] }}:80 check cookie s{{loop.index}}
+      {% endif %}
     {% endfor %}
 
 {% if haproxy_enable_stats %}
