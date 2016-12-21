@@ -5,3 +5,4 @@ haproxy_stats_username: someuser
 haproxy_stats_password: somepassword
 haproxy_stats_port: 21212
 haproxy_config_use_appservers_eth: eth0
+haproxy_maxconn: 150
