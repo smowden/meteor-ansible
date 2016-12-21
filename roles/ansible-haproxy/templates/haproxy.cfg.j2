@@ -62,7 +62,7 @@ backend nodes
 
     {% for host in groups['appservers'] %}
 
-    {% if hostvars[host] is defined %}
+    {% if hostvars[host] is defined and hostvars[host]['ansible_'+haproxy_config_use_appservers_eth] is defined %}
     server s{{loop.index}} {{ hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] }}:80 maxconn {{ haproxy_maxconn }} check cookie s{{loop.index}}
     {% endif %}
 
