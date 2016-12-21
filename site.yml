@@ -58,7 +58,7 @@
       when: s3_bundle_already_exists is not defined
 
     - name: find exact path to bundle
-      find: paths="{{ flowkey_build_dir }}{{ git_checkout_result.after }}"
+      find: paths="{{ flowkey_build_dir }}/{{ git_checkout_result.after }}"
             patterns="*.tar.gz"
       register: bundle_file
       when: s3_bundle_already_exists is not defined
