@@ -9,7 +9,7 @@ nginx_force_ssl: no
 nginx_ssl_key_file_name: meteor_app.key
 nginx_ssl_cert_file_name: meteor_app.pem
 nginx_client_max_body_size: 8m
-nginx_access_log: off
+nginx_access_log: "off"
 passenger_port: 80
 passenger_min_instances: 1
 passenger_friendly_error_pages: "off"
