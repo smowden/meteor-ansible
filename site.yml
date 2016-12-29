@@ -46,6 +46,7 @@
       command:
         chdir="{{ flowkey_app_dir }}"
         meteor npm install
+      when: s3_bundle_already_exists is not defined
 
     - name: build meteor app
       command:
