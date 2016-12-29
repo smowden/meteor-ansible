@@ -1,8 +1,7 @@
-#- hosts: all
-#  sudo: yes
-#  roles:
-#      - { role: telusdigital.logdna, when: logdna_secret_key is defined }
-
+- hosts: all
+  sudo: yes
+  roles:
+      - { role: telusdigital.logdna, when: logdna_secret_key is defined }
 
 - hosts: localhost
   sudo: no
