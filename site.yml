@@ -1,8 +1,3 @@
-- hosts: all
-  sudo: yes
-  roles:
-      - { role: telusdigital.logdna, when: logdna_secret_key is defined }
-
 - hosts: localhost
   sudo: no
   tasks:
@@ -102,6 +97,7 @@
     - nodejs
     - nginx-passenger
     - meteorapp
+    - { role: telusdigital.logdna, when: logdna_secret_key is defined }
   vars:
     nodejs_npm_modules: ["fibers", "meteorite"]
 
@@ -109,4 +105,5 @@
   sudo: yes
   roles:
     - ansible-haproxy
+    - { role: telusdigital.logdna, when: logdna_secret_key is defined }
 
