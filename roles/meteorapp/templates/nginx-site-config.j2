@@ -1,21 +1,22 @@
 server {
     server_name {{ nginx_server_name }};
     listen {{ passenger_port }};
-    {% if nginx_enable_ssl %}
-      listen 443 ssl;
-      ssl on;
-      ssl_certificate     /etc/ssl/certs/{{ nginx_ssl_cert_file_name }};
-      ssl_certificate_key /etc/ssl/private/{{ nginx_ssl_key_file_name }};
-      ssl_prefer_server_ciphers On;
-      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-      ssl_ciphers 'AES128+EECDH:AES128+EDH:!aNULL';
-      ssl_session_cache shared:SSL:10m;
-      {% if nginx_force_ssl %}
-          if ($scheme = http) {
-              return 301 https://$server_name$request_uri;
-          }
-      {% endif %}
+    access_log {{ nginx_access_log }};
+{% if nginx_enable_ssl %}
+    listen 443 ssl;
+    ssl on;
+    ssl_certificate     /etc/ssl/certs/{{ nginx_ssl_cert_file_name }};
+    ssl_certificate_key /etc/ssl/private/{{ nginx_ssl_key_file_name }};
+    ssl_prefer_server_ciphers On;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers 'AES128+EECDH:AES128+EDH:!aNULL';
+    ssl_session_cache shared:SSL:10m;
+    {% if nginx_force_ssl %}
+      if ($scheme = http) {
+          return 301 https://$server_name$request_uri;
+      }
     {% endif %}
+{% endif %}
 
     root {{ app_checkout_bundle_path }}/bundle/public/;
     passenger_enabled on;
@@ -27,12 +28,12 @@ server {
     passenger_min_instances {{ passenger_min_instances }};
     passenger_startup_file main.js;
     passenger_start_timeout {{ passenger_start_timeout }};
-    {% if passenger_max_requests is defined %}
+{% if passenger_max_requests is defined %}
     passenger_max_requests {{ passenger_max_requests }};
-    {% endif %}
-    {% if meteor_settings_file_exists %}
+{% endif %}
+{% if meteor_settings_file_exists %}
     passenger_env_var METEOR_SETTINGS '{{ hostvars['localhost']['var_meteor_settings']['stdout'] }}';
-    {% endif %}
+{% endif %}
 
     client_max_body_size {{ nginx_client_max_body_size }};
 
