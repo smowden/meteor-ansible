@@ -1,7 +1,6 @@
 - hosts: localhost
   sudo: no
   tasks:
-    - debug: msg={{ hostvars }}
     - name: clone repo from github
       git: repo={{ app_git_repo | mandatory }}
            update=yes
@@ -11,8 +10,6 @@
            force=yes
       register: git_checkout_result
       until: git_checkout_result|succeeded # bug in ansible 2.2, https://github.com/ansible/ansible-modules-core/issues/5504#issuecomment-265923220
-
-    - debug: msg={{ git_checkout_result }}
 
     - name: ensure target dir exists
       file: path=flowkey_build_dir state=directory
