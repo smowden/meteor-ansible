@@ -44,7 +44,6 @@
     name=nodejs=4.*
     update_cache=yes
     state=present
-    force=yes
 
 - name: install build tools
   sudo: true
