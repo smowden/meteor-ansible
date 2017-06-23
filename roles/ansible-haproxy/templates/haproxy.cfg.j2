@@ -61,17 +61,17 @@ backend nodes
     {% endif %}
 
     {% for host in groups['appservers'] %}
-
     {% if hostvars[host] is defined and hostvars[host]['ansible_'+haproxy_config_use_appservers_eth] is defined %}
     server s{{loop.index}} {{ hostvars[host]['ansible_'+haproxy_config_use_appservers_eth]['ipv4']['address'] }}:80 maxconn {{ haproxy_maxconn }} check cookie s{{loop.index}}
     {% endif %}
-
     {% endfor %}
 
 {% if haproxy_enable_stats %}
-listen stats *:{{ haproxy_stats_port }}
+listen stats :{{ haproxy_stats_port }}
+    mode http
     stats enable
-    stats uri /
     stats hide-version
+    stats realm Haproxy\ Statistics
+    stats uri /
     stats auth {{ haproxy_stats_username }}:{{ haproxy_stats_password }}
 {% endif %}
