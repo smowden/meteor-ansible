@@ -41,7 +41,7 @@
 - name: Node apt-get install
   sudo: true
   apt:
-    name=nodejs=4.*
+    name=nodejs=8.*
     update_cache=yes
     state=present
 
