@@ -15,7 +15,7 @@
   apt: name={{ item }} state=present
   with_items:
     - nginx-extras
-    - passenger=5.3.1
+    - passenger=1:5.3.1*
 
 - name: NGINX + Passenger | copy nginx.conf
   template: src=nginx.conf dest=/etc/nginx/nginx.conf
