@@ -12,7 +12,7 @@
   apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main' state=present update_cache=yes
 
 - name: NGINX + Passenger | install nginx and passenger
-  apt: name={{ item }} state=present upgrade=yes
+  apt: name={{ item }} state=present
   with_items:
     - nginx-extras
     - passenger=1:5.3.5*
