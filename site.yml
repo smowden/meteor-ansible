@@ -96,7 +96,7 @@
     - meteorapp
     - { role: telusdigital.logdna, when: logdna_secret_key is defined }
   vars:
-    nodejs_npm_modules: ["fibers", "meteorite"]
+    nodejs_npm_modules: ["fibers"]
 
 - hosts: loadbalancers
   sudo: yes
