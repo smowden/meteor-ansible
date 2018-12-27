@@ -1,6 +1,8 @@
 - hosts: localhost
   sudo: no
   tasks:
+    - debug: msg="{{ app_git_checkout }}"
+
     - name: clone repo from github
       git: repo={{ app_git_repo | mandatory }}
            update=yes
