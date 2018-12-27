@@ -89,6 +89,7 @@
   sudo: yes
   vars:
     deploy_git_commit: "{{ git_checkout_result.after }}"
+    nodejs_npm_modules: ["fibers"]
   #vars_files:
   #  - vars/main.yml
   #  - group_vars/{{ groupEnvConfigFile }}
@@ -97,8 +98,6 @@
     - nginx-passenger
     - meteorapp
     - { role: telusdigital.logdna, when: logdna_secret_key is defined }
-  vars:
-    nodejs_npm_modules: ["fibers"]
 
 - hosts: loadbalancers
   sudo: yes
