@@ -13,6 +13,18 @@
   - apt: name=python-boto update_cache=yes state=present
     sudo: yes
 
+  - name: find all files that are older than three days
+    find:
+      paths: "{{ app_bundle_dir }}"
+      age: "3d"
+      file_type: directory
+    register: 3d_older_bundles
+
+  - name: remove older than 3 days but first five newest
+    file:
+      path: "{{ item.path }}"
+      state: absent
+    with_items: "{{ (3d_older_bundles.files | sort(attribute='ctime'))[5:] | list }}"
 
   - s3: bucket="{{ s3_bucket }}"
         dest="{{ tarball_destination }}"
