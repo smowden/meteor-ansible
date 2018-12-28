@@ -17,7 +17,7 @@
     find:
       paths: "{{ app_bundle_dir }}"
       age: "3d"
-      file_type: directory
+      file_type: any
     register: older_bundles
 
   - name: remove older than 3 days but first five newest
