@@ -24,7 +24,7 @@
     file:
       path: "{{ item.path }}"
       state: absent
-    with_items: "{{ (older_bundles.files | sort(attribute='ctime'))[5:] | list }}"
+    with_items: "{{ (older_bundles.files | sort(attribute='ctime'))[5:] | list[::-1] }}"
 
   - s3: bucket="{{ s3_bucket }}"
         dest="{{ tarball_destination }}"
