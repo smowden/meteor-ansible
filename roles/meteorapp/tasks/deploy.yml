@@ -24,8 +24,8 @@
     file:
       path: "{{ item.path }}"
       state: absent
-    with_items: "{{ (older_bundles.files | sort(attribute='ctime'))[-5:] | list }}"
-#    sudo: yes
+    with_items: "{{ (older_bundles.files | sort(attribute='mtime'))[5:] | list }}"
+    sudo: yes
 
   - s3: bucket="{{ s3_bucket }}"
         dest="{{ tarball_destination }}"
