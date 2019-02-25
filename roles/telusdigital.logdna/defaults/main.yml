@@ -1,3 +1,2 @@
 ---
 logdna_logging_directory: /var/log
-logdna_secret_key: "{{ mandatory }}"
