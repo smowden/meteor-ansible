@@ -6,8 +6,8 @@ mongodb_install: yes
 mongodb_package: mongodb-org
 
 mongodb_additional_packages:
-- python-selinux
-- python-pymongo
+  - python-selinux
+  - python-pymongo
 
 mongodb_user: mongodb
 mongodb_daemon_name: "{{ 'mongod' if ('mongodb-org' in mongodb_package) else 'mongodb' }}"

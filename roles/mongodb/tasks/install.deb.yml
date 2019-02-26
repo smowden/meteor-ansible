@@ -14,5 +14,5 @@
   apt: pkg={{mongodb_package}} state=present
 
 - name: Install additional packages
-  apt: pkg={{item}}
-  with_items: mongodb_additional_packages
+  apt:
+    name: "{{ mongodb_additional_packages }}"
